@@ -1,0 +1,1753 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
+
+*, ::before, ::after{
+  --tw-border-spacing-x: 0;
+  --tw-border-spacing-y: 0;
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  --tw-pan-x:  ;
+  --tw-pan-y:  ;
+  --tw-pinch-zoom:  ;
+  --tw-scroll-snap-strictness: proximity;
+  --tw-gradient-from-position:  ;
+  --tw-gradient-via-position:  ;
+  --tw-gradient-to-position:  ;
+  --tw-ordinal:  ;
+  --tw-slashed-zero:  ;
+  --tw-numeric-figure:  ;
+  --tw-numeric-spacing:  ;
+  --tw-numeric-fraction:  ;
+  --tw-ring-inset:  ;
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: rgb(59 130 246 / 0.5);
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-ring-shadow: 0 0 #0000;
+  --tw-shadow: 0 0 #0000;
+  --tw-shadow-colored: 0 0 #0000;
+  --tw-blur:  ;
+  --tw-brightness:  ;
+  --tw-contrast:  ;
+  --tw-grayscale:  ;
+  --tw-hue-rotate:  ;
+  --tw-invert:  ;
+  --tw-saturate:  ;
+  --tw-sepia:  ;
+  --tw-drop-shadow:  ;
+  --tw-backdrop-blur:  ;
+  --tw-backdrop-brightness:  ;
+  --tw-backdrop-contrast:  ;
+  --tw-backdrop-grayscale:  ;
+  --tw-backdrop-hue-rotate:  ;
+  --tw-backdrop-invert:  ;
+  --tw-backdrop-opacity:  ;
+  --tw-backdrop-saturate:  ;
+  --tw-backdrop-sepia:  ;
+  --tw-contain-size:  ;
+  --tw-contain-layout:  ;
+  --tw-contain-paint:  ;
+  --tw-contain-style:  ;
+}
+
+::backdrop{
+  --tw-border-spacing-x: 0;
+  --tw-border-spacing-y: 0;
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  --tw-pan-x:  ;
+  --tw-pan-y:  ;
+  --tw-pinch-zoom:  ;
+  --tw-scroll-snap-strictness: proximity;
+  --tw-gradient-from-position:  ;
+  --tw-gradient-via-position:  ;
+  --tw-gradient-to-position:  ;
+  --tw-ordinal:  ;
+  --tw-slashed-zero:  ;
+  --tw-numeric-figure:  ;
+  --tw-numeric-spacing:  ;
+  --tw-numeric-fraction:  ;
+  --tw-ring-inset:  ;
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: rgb(59 130 246 / 0.5);
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-ring-shadow: 0 0 #0000;
+  --tw-shadow: 0 0 #0000;
+  --tw-shadow-colored: 0 0 #0000;
+  --tw-blur:  ;
+  --tw-brightness:  ;
+  --tw-contrast:  ;
+  --tw-grayscale:  ;
+  --tw-hue-rotate:  ;
+  --tw-invert:  ;
+  --tw-saturate:  ;
+  --tw-sepia:  ;
+  --tw-drop-shadow:  ;
+  --tw-backdrop-blur:  ;
+  --tw-backdrop-brightness:  ;
+  --tw-backdrop-contrast:  ;
+  --tw-backdrop-grayscale:  ;
+  --tw-backdrop-hue-rotate:  ;
+  --tw-backdrop-invert:  ;
+  --tw-backdrop-opacity:  ;
+  --tw-backdrop-saturate:  ;
+  --tw-backdrop-sepia:  ;
+  --tw-contain-size:  ;
+  --tw-contain-layout:  ;
+  --tw-contain-paint:  ;
+  --tw-contain-style:  ;
+}
+
+/*
+! tailwindcss v3.4.15 | MIT License | https://tailwindcss.com
+*/
+
+/*
+1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
+2. Allow adding a border to an element by just adding a border-width. (https://github.com/tailwindcss/tailwindcss/pull/116)
+*/
+
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  /* 1 */
+  border-width: 0;
+  /* 2 */
+  border-style: solid;
+  /* 2 */
+  border-color: #e5e7eb;
+  /* 2 */
+}
+
+::before,
+::after {
+  --tw-content: '';
+}
+
+/*
+1. Use a consistent sensible line-height in all browsers.
+2. Prevent adjustments of font size after orientation changes in iOS.
+3. Use a more readable tab size.
+4. Use the user's configured `sans` font-family by default.
+5. Use the user's configured `sans` font-feature-settings by default.
+6. Use the user's configured `sans` font-variation-settings by default.
+7. Disable tap highlights on iOS
+*/
+
+html,
+:host {
+  line-height: 1.5;
+  /* 1 */
+  -webkit-text-size-adjust: 100%;
+  /* 2 */
+  /* 3 */
+  tab-size: 4;
+  /* 3 */
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  /* 4 */
+  font-feature-settings: normal;
+  /* 5 */
+  font-variation-settings: normal;
+  /* 6 */
+  -webkit-tap-highlight-color: transparent;
+  /* 7 */
+}
+
+/*
+1. Remove the margin in all browsers.
+2. Inherit line-height from `html` so users can set them as a class directly on the `html` element.
+*/
+
+body {
+  margin: 0;
+  /* 1 */
+  line-height: inherit;
+  /* 2 */
+}
+
+/*
+1. Add the correct height in Firefox.
+2. Correct the inheritance of border color in Firefox. (https://bugzilla.mozilla.org/show_bug.cgi?id=190655)
+3. Ensure horizontal rules are visible by default.
+*/
+
+hr {
+  height: 0;
+  /* 1 */
+  color: inherit;
+  /* 2 */
+  border-top-width: 1px;
+  /* 3 */
+}
+
+/*
+Add the correct text decoration in Chrome, Edge, and Safari.
+*/
+
+abbr:where([title]) {
+  -webkit-text-decoration: underline dotted;
+          text-decoration: underline dotted;
+}
+
+/*
+Remove the default font size and weight for headings.
+*/
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+/*
+Reset links to optimize for opt-in styling instead of opt-out.
+*/
+
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+/*
+Add the correct font weight in Edge and Safari.
+*/
+
+b,
+strong {
+  font-weight: bolder;
+}
+
+/*
+1. Use the user's configured `mono` font-family by default.
+2. Use the user's configured `mono` font-feature-settings by default.
+3. Use the user's configured `mono` font-variation-settings by default.
+4. Correct the odd `em` font sizing in all browsers.
+*/
+
+code,
+kbd,
+samp,
+pre {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  /* 1 */
+  font-feature-settings: normal;
+  /* 2 */
+  font-variation-settings: normal;
+  /* 3 */
+  font-size: 1em;
+  /* 4 */
+}
+
+/*
+Add the correct font size in all browsers.
+*/
+
+small {
+  font-size: 80%;
+}
+
+/*
+Prevent `sub` and `sup` elements from affecting the line height in all browsers.
+*/
+
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+sup {
+  top: -0.5em;
+}
+
+/*
+1. Remove text indentation from table contents in Chrome and Safari. (https://bugs.chromium.org/p/chromium/issues/detail?id=999088, https://bugs.webkit.org/show_bug.cgi?id=201297)
+2. Correct table border color inheritance in all Chrome and Safari. (https://bugs.chromium.org/p/chromium/issues/detail?id=935729, https://bugs.webkit.org/show_bug.cgi?id=195016)
+3. Remove gaps between table borders by default.
+*/
+
+table {
+  text-indent: 0;
+  /* 1 */
+  border-color: inherit;
+  /* 2 */
+  border-collapse: collapse;
+  /* 3 */
+}
+
+/*
+1. Change the font styles in all browsers.
+2. Remove the margin in Firefox and Safari.
+3. Remove default padding in all browsers.
+*/
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit;
+  /* 1 */
+  font-feature-settings: inherit;
+  /* 1 */
+  font-variation-settings: inherit;
+  /* 1 */
+  font-size: 100%;
+  /* 1 */
+  font-weight: inherit;
+  /* 1 */
+  line-height: inherit;
+  /* 1 */
+  letter-spacing: inherit;
+  /* 1 */
+  color: inherit;
+  /* 1 */
+  margin: 0;
+  /* 2 */
+  padding: 0;
+  /* 3 */
+}
+
+/*
+Remove the inheritance of text transform in Edge and Firefox.
+*/
+
+button,
+select {
+  text-transform: none;
+}
+
+/*
+1. Correct the inability to style clickable types in iOS and Safari.
+2. Remove default button styles.
+*/
+
+button,
+input:where([type='button']),
+input:where([type='reset']),
+input:where([type='submit']) {
+  -webkit-appearance: button;
+  /* 1 */
+  background-color: transparent;
+  /* 2 */
+  background-image: none;
+  /* 2 */
+}
+
+/*
+Use the modern Firefox focus style for all focusable elements.
+*/
+
+:-moz-focusring {
+  outline: auto;
+}
+
+/*
+Remove the additional `:invalid` styles in Firefox. (https://github.com/mozilla/gecko-dev/blob/2f9eacd9d3d995c937b4251a5557d95d494c9be1/layout/style/res/forms.css#L728-L737)
+*/
+
+:-moz-ui-invalid {
+  box-shadow: none;
+}
+
+/*
+Add the correct vertical alignment in Chrome and Firefox.
+*/
+
+progress {
+  vertical-align: baseline;
+}
+
+/*
+Correct the cursor style of increment and decrement buttons in Safari.
+*/
+
+::-webkit-inner-spin-button,
+::-webkit-outer-spin-button {
+  height: auto;
+}
+
+/*
+1. Correct the odd appearance in Chrome and Safari.
+2. Correct the outline style in Safari.
+*/
+
+[type='search'] {
+  -webkit-appearance: textfield;
+  /* 1 */
+  outline-offset: -2px;
+  /* 2 */
+}
+
+/*
+Remove the inner padding in Chrome and Safari on macOS.
+*/
+
+::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+/*
+1. Correct the inability to style clickable types in iOS and Safari.
+2. Change font properties to `inherit` in Safari.
+*/
+
+::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  /* 1 */
+  font: inherit;
+  /* 2 */
+}
+
+/*
+Add the correct display in Chrome and Safari.
+*/
+
+summary {
+  display: list-item;
+}
+
+/*
+Removes the default spacing and border for appropriate elements.
+*/
+
+blockquote,
+dl,
+dd,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+figure,
+p,
+pre {
+  margin: 0;
+}
+
+fieldset {
+  margin: 0;
+  padding: 0;
+}
+
+legend {
+  padding: 0;
+}
+
+ol,
+ul,
+menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/*
+Reset default styling for dialogs.
+*/
+
+dialog {
+  padding: 0;
+}
+
+/*
+Prevent resizing textareas horizontally by default.
+*/
+
+textarea {
+  resize: vertical;
+}
+
+/*
+1. Reset the default placeholder opacity in Firefox. (https://github.com/tailwindlabs/tailwindcss/issues/3300)
+2. Set the default placeholder color to the user's configured gray 400 color.
+*/
+
+input::placeholder,
+textarea::placeholder {
+  opacity: 1;
+  /* 1 */
+  color: #9ca3af;
+  /* 2 */
+}
+
+/*
+Set the default cursor for buttons.
+*/
+
+button,
+[role="button"] {
+  cursor: pointer;
+}
+
+/*
+Make sure disabled buttons don't get the pointer cursor.
+*/
+
+:disabled {
+  cursor: default;
+}
+
+/*
+1. Make replaced elements `display: block` by default. (https://github.com/mozdevs/cssremedy/issues/14)
+2. Add `vertical-align: middle` to align replaced elements more sensibly by default. (https://github.com/jensimmons/cssremedy/issues/14#issuecomment-634934210)
+   This can trigger a poorly considered lint error in some tools but is included by design.
+*/
+
+img,
+svg,
+video,
+canvas,
+audio,
+iframe,
+embed,
+object {
+  display: block;
+  /* 1 */
+  vertical-align: middle;
+  /* 2 */
+}
+
+/*
+Constrain images and videos to the parent width and preserve their intrinsic aspect ratio. (https://github.com/mozdevs/cssremedy/issues/14)
+*/
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Make elements with the HTML hidden attribute stay hidden by default */
+
+[hidden]:where(:not([hidden="until-found"])) {
+  display: none;
+}
+
+@font-face {
+  font-family: 'Conthrax';
+
+  src: url('../public/font/conthrax/conthrax-sb.otf') format('opentype');
+
+  font-weight: normal;
+
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Terminus';
+
+  src: url('../public/font/terminus/TerminusTTF-4.49.3.ttf') format('truetype');
+
+  font-weight: normal;
+
+  font-style: normal;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #000;
+  font-family: 'Roboto', sans-serif;
+  overflow: hidden;
+}
+
+.supersize{
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.game{
+  width: 200px;
+  height: 150px;
+  background-color: #100e14;
+  display: none;
+  /*position: absolute;*/
+  overflow: hidden;
+}
+
+.gameWrapper{
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: -moz-fit-content;
+  height: fit-content;
+  margin-bottom: 0;
+  height: 4vh;
+  background-color: #000;
+  z-index: 0;
+  -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+}
+
+.titleBackground{
+  color: #eee;
+  font-family: 'Conthrax' !important;
+  font-size: 5vw;
+  margin-left: -28vw;
+  margin-top: -14.5vw;
+}
+
+.free-play{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100px;
+  height: 48px;
+  border: 1px solid #67F4B6;
+  color: #67F4B6;
+  font-family: 'Terminus';
+  border-radius: 10px;
+  margin-left: 2vw;
+  margin-right: 1vw;
+  font-weight: 700;
+}
+
+.searchbox{
+  width: 85%;
+  height: 3.5vh;
+  background: #fff;
+  opacity: 0.5;
+  border-radius: 10px;
+  margin-bottom: 0.7vh;
+  margin-left: 1vw;
+  border: 1px solid;
+  border-color: #5f5f5f;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.wallet-buttons {
+  z-index: 999999;
+  margin-left: auto;
+  border-radius: 5px;
+  margin-top: -5vh;
+}
+
+.wallet-buttons .wallet-adapter-button{
+  border: 1px solid rgb(196, 181, 253);
+  box-shadow: rgb(109, 88, 135) 0px 0px 10px 0px;
+  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  font-family: "Terminus";
+  font-size: 20px !important;
+  border-radius: 10px;
+  color: white !important;
+}
+
+.titleText{
+  color: #FFF;
+  font-family: 'Conthrax';
+  font-size: 3rem;
+  padding-left: 2vw;
+  padding-top: 1vh;
+  z-index: 10;
+  opacity: 1 !important;
+}
+
+.titleImg{
+  margin-left: 2vw;
+  height: auto;
+  width: 3.5vw;
+}
+
+.select-background{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100%;
+  position: absolute;
+  font-family: 'Conthrax' !important;
+}
+
+.linksFooter{
+  height: 7vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  z-index: 2;
+}
+
+#linkImg:hover {
+  opacity: 0.7;
+}
+
+.parent-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: #333;
+}
+
+.dropdown-container {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  font-family: 'Terminus', sans-serif;
+  -webkit-user-select: none;
+          user-select: none;
+  margin-top: 4vh;
+  margin-left: 2vw;
+  width: 120px;
+}
+
+.selected-option {
+  padding: 10px;
+  width: 120px;
+  background-color: black;
+  color: white;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.selected-option.open {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: black;
+  border: 1px solid #ccc;
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  width: 120px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.dropdown-item {
+  width: 120px;
+  padding: 10px;
+  color: white;
+  text-align: left;
+}
+
+.dropdown-item:hover .dropdown-text {
+  opacity: 0.5;
+}
+
+.dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+  opacity: 1 !important;
+}
+
+.green-dot {
+  background-color: #67F4B6;
+}
+
+.red-dot {
+  background-color: #FF8888;
+}
+
+.solstats{
+  margin-left: auto;
+  display: flex;
+  background: black;
+  margin-right: 2vw;
+  color: white;
+  border: 1px solid;
+  font-family: 'Terminus';
+  border-color: #FFFFFF4D;
+  height: 40px;
+}
+
+.tps{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border: 1px solid;
+  border-color: #FFFFFF4D;
+  border-right: 0px solid;
+}
+
+.playercount{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border: 1px solid;
+  border-color: #FFFFFF4D;
+}
+
+.solprice{
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  justify-content: center;
+  border: 1px solid;
+  border-color: #FFFFFF4D;
+}
+
+.csupersize{
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  margin: 10px;
+}
+
+.join-game{
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  margin-top: 11vh;
+}
+
+.table {
+  -webkit-backdrop-filter: brightness(0.95);
+          backdrop-filter: brightness(0.95);
+  display: grid;
+  grid-template-rows: auto auto;
+  grid-template-columns: 2fr 1fr 1fr;
+  width: 30vw;
+  position: fixed;
+  margin-top: -7vw;
+}
+
+.playerNameText {
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: left;
+  font-size: 1rem;
+  border: none;
+  background-color: transparent;
+  font-family: 'Terminus';
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.buyInSlider {
+  background-color: #000;
+  grid-column: span 2;
+  display: flex;
+  height: 2.5em;
+  width: 90%;
+  color:"white";
+  font-size: 1rem;
+  margin-left: 0.5em;
+  font-family: 'Terminus';
+  color: 'white';
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 90%;
+  height: 1px;
+  background: white;
+  outline: none;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: white;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.buyInField {
+  background-color: #FFF;
+  grid-column: span 1;
+  display: flex;
+  height: 2.5em;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  margin-left: 1em;
+  margin-bottom: 1em;
+  width: 95%;
+  border: 1px solid #DCDCDC;
+  text-align: left;
+  font-size: 1rem;
+  font-family: 'Terminus';
+  overflow: hidden;
+}
+
+.BuyInText {
+  width: 20%;
+  outline: none;
+  display: flex;
+  align-items: right;
+  justify-content: right;
+  text-align: right;
+  margin-right: 15px;
+  font-size: 1rem;
+  border: none;
+  background-color: transparent;
+  font-family: 'Terminus';
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.playerName {
+  background-color: #FFF;
+  grid-column: span 3;
+  display: flex;
+  margin: 1em;
+  height: 2.5em;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border: 1px solid #DCDCDC;
+  text-align: left;
+  margin-top: 5em;
+  font-size: 1rem;
+  font-family: 'Terminus';
+  overflow: hidden;
+}
+
+.gameInfoContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  overflow-y: auto;
+  align-self: flex-start;
+  width: 43%;
+  border-radius: 10px;
+  overflow-y: scroll;
+  background:"#000";
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  margin-top: 0;
+  position: fixed;
+  border-bottom: 1px solid;
+}
+
+.gameSelect {
+  grid-column: span 1;
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-left: 1vw;
+}
+
+.gameSelectButton{
+  width: 43%;
+  background-color: #FFF;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  border-radius: 15px;
+  position: fixed;
+  align-self: flex-start;
+}
+
+.play {
+  display: inline-flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: 1vw;
+}
+
+.playNowButton{
+  width: 100%;
+  background: #FFF !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 3em;
+  padding-right: 0.4em;
+  padding-left: 0.4em;
+  border-radius: 0.8em;
+  border: 1px solid white;
+  font-family: 'Conthrax' !important;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 'opacity 0.3s ease background 0.3s ease 0s, color 0.3s ease 0s';
+  z-index: 10;
+}
+
+.playNowButton:hover{
+  background-color: #000 !important;
+  color: #eee;
+  border: 1px solid white !important;
+  box-shadow: none !important;
+}
+
+.playButton{
+  width: 100%;
+  background: #FFF !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 3em;
+  /*padding-top: 1vh;
+  padding-bottom: 1vh;*/
+  border-radius: 1em;
+  border: 1px solid white;
+  font-family: 'Conthrax' !important;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 'opacity 0.3s ease background 0.3s ease 0s, color 0.3s ease 0s';
+  z-index: 10;
+}
+
+.playButton:hover{
+  background-color: #000 !important;
+  color: #eee;
+  border: 1px solid white !important;
+  box-shadow: none !important;
+}
+
+.createGameButton{
+  width: 100%;
+  background-color: #FFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 3em;
+  border-radius: 1em;
+  border: 1px solid white;
+  font-family: 'Conthrax' !important;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 'opacity 0.3s ease background 0.3s ease 0s, color 0.3s ease 0s';
+}
+
+.createGameButton:hover{
+  background-color: #000;
+  color: #eee;
+}
+
+.gameInfo{
+  font-family: 'Conthrax' !important;
+}
+
+.buildSelect{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: -moz-fit-content;
+  height: fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+
+.circle {
+  width: 1vw;
+  height: 1vw;
+  background-color: #000;
+  border: 1px solid #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.3s background-color 0.3s;
+  margin: 1vw;
+  cursor: pointer;
+}
+
+.circleOn {
+  width: 1vw;
+  height: 1vw;
+  background-color: #fff;
+  border: 1px solid #000;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.3s background-color 0.3s;
+  margin: 1vw;
+  cursor: pointer;
+}
+
+.circle:hover {
+  border-color: #000;
+  background-color: #fff;
+}
+
+.buildViewer{
+  height: 60vh;
+  padding: 2vw;
+  width: 60vw;
+  background-color: black;
+  border: 1px solid #272B30;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
+  border-radius: 0.75rem;
+}
+
+.pannel{
+  color: white;
+  display: flex;
+}
+
+.form-title{
+  font-family: 'terminus';
+}
+
+.topbar button {
+  padding: 8px 12px;
+  background: transparent;
+  border: 2px solid #000;
+  width: -moz-fit-content;
+  width: fit-content;
+  border-radius: 5px;
+  transition: 0.2s;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.topbar button:hover {
+  background: #000 !important;
+  border: 1px solid rgb(117, 94, 146);
+  box-shadow: rgb(109, 88, 135) 0px 0px 0px 0px;
+}
+
+.wallet-buttons button{
+  width: auto;
+  margin-top:5vh;
+  margin-right: 2vw;
+}
+
+.wallet-adapter-button-start-icon {
+  display: flex;
+}
+
+.wallet-buttons .wallet-adapter-button-start-icon {
+  display: none !important;
+}
+
+.grid-container-TPX {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+  width: 100%;
+  margin-right: auto;
+  overflow-y: scroll;
+}
+
+.grid-item-TPX {
+  margin-bottom: 1.5vw;
+  margin-left: 1.5vw;
+}
+
+.switchsizes{
+  height: 20vw;
+  width: 20vw;
+}
+
+.grid-item-claim {
+  background: black;
+  border-radius: 0.5vw;
+}
+
+.grid-item-claim h2 {
+  flex-grow: 0;
+  display: block;
+  margin-top: 0;
+  margin-bottom: 0.3vw;
+  text-align: left;
+  color: black;
+  padding-left: 1vw;
+  font-weight: 700;
+  font-size: 2vw;
+  font-family: "Terminus";
+}
+
+.titleArea{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.container {
+  display: grid;
+  justify-content: space-between;
+  width: 15vw;
+  height: -moz-fit-content;
+  height: fit-content;
+  grid-template-rows: 1fr;
+  grid-template-columns: 1fr;
+  margin-top: auto;
+}
+
+.TPX_card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 5vw;
+  height: 5vw;
+  border-radius: 0vw;
+  background: #F1F1F1;
+  overflow: hidden;
+}
+
+.TPX_card img {
+  flex-grow: 1;
+  width: auto;
+  height: 50%;
+  margin-bottom: 0;
+  align-self: center
+}
+
+#cardTitle{
+  color: white;
+  font-family: 'Terminus';
+  font-size: 1.4vw;
+  font-weight: 900;
+}
+
+#cardDesc{
+  color: white;
+  font-family: 'Terminus';
+  font-size: 0.8vw;
+  font-weight: 200;
+  word-wrap: break-word;
+}
+
+#cardDescWrap{
+  width:15vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+#tpxCost{
+  font-size: 1.2vw;
+  margin-left: 0.3vw;
+}
+
+#tpxlogo{
+  width: 1.3vw;
+  height: 1.3vw;
+  border-radius: 1vw;
+}
+
+.tpx_claim_button {
+  cursor: pointer;
+  border-width: 0.05vw;
+  border-style: solid;
+  border-color: black;
+  border-radius: 0.5vw;
+  background-color: rgb(134, 201, 154);
+  padding: 0.2vw;
+  padding-right: 1vw;
+  padding-left: 1vw;
+  width: -moz-fit-content;
+  width: fit-content;
+  height: 2vw;
+  font-weight: 295;
+  font-size: 1vw;
+  color: black;
+  font-family: 'Terminus';
+  letter-spacing: 0.4px;
+  text-align: center;
+  transition: all .25s ease;
+}
+
+.tpx_claim_button:hover {
+  box-shadow: 0 .5px 5px #7bd780;
+  background-color: #7bd780;
+  filter: brightness(130%);
+}
+
+.tpx_claim_button:active {
+  transform: translateY(1px);
+  transition: all .01s ease;
+}
+
+.claim-right {
+  display: flex;
+  align-items: center;
+  width: 15vw;
+  height: 2.5vw;
+  background-color: white;
+  justify-content: space-between;
+  padding: 0.2vw;
+  border-radius: 0.5vw;
+  margin-top: auto;
+  border: solid;
+  border-width: 1px;
+  border-color: #000000;
+}
+
+.claim-right-wrapper{
+  flex-grow: 0;
+  position: relative;
+  width: 15vw;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 1vw;
+}
+
+.mainButton{
+  font-family: 'Terminus';
+  font-size: 1.1rem;
+}
+
+#status {
+  position: absolute;
+  padding: 10px;
+  background: rgba(17, 19, 20, 0.4);
+  color: #FFF;
+  font-family: 'Terminus';
+  font-size: 16.1px;
+  top: 10px;
+  right: 10px;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 5px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: gray;
+  filter: drop-shadow(gray 0px 0px 5px);
+}
+
+#status .title {
+  font-family: 'Terminus';
+  font-size: 25px;
+}
+
+#status .me {
+  font-family: 'Terminus';
+  color: #FF8888;
+  font-size: 16.1px;
+}
+
+.exitButton{
+  font-family: 'Terminus';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  box-sizing: border-box;
+  font-size: 14px;
+  cursor: pointer;
+  color: black;
+  text-decoration: none;
+  background: #f07171;
+  float: right;
+  border: 1px solid #f07171;
+  border-radius: 100px;
+  padding: 6px 10px;
+  transition: background 0.3s ease 0s, color 0.3s ease 0s;
+  z-index: 9999999;
+}
+
+.exitButton:active, .exitButton:hover {
+  background: black;
+  color:#f07171;
+  outline: none;
+  box-shadow: none;
+}
+
+.create-game-button {
+  padding: 8px 16px;
+  cursor: pointer;
+  background-color: #000;
+  color: white;
+  border: 1px solid rgb(196, 181, 253);
+  box-shadow: rgb(109, 88, 135) 0px 0px 10px 0px;
+  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  font-family: "Terminus";
+  font-size: 20px !important;
+  border-radius: 10px;
+}
+
+.create-game-button:hover {
+  background: #000 !important;
+  border: 1px solid rgb(117, 94, 146);
+  box-shadow: rgb(109, 88, 135) 0px 0px 0px 0px;
+}
+
+.magicblock-logo {
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  width: 10rem;
+  height: auto;
+  z-index: 10;
+}
+
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border-left-color: #09f;
+  animation: spin 1s ease infinite;
+}
+
+.info-container {
+  display: flex;
+  width: 100%;
+  overflow-y: auto;
+  margin-top: -20vh;
+}
+
+.info-image-container {
+  width: 35%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  opacity: 1;
+  transition: opacity 1s ease-in-out;
+}
+
+.info-spinning-image {
+  width: 50%;
+  height: auto;
+  transition: transform 0.2s ease-out;
+}
+
+.info-text-container {
+  width: 65%;
+  padding: 20px;
+  overflow-y: auto;
+  padding-top:20vh;
+  padding-right: 6vw;
+}
+
+.info-scrolling-text {
+  height: 200%;
+  color: white;
+  font-family: 'Terminus';
+  font-size: 5rem;
+}
+
+.info-container::-webkit-scrollbar {
+  width: 10px;
+}
+
+.info-container::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+.info-container::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.info-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: #222;
+  color: #fff;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  position: relative;
+  top: 90vh;
+}
+
+.info-footer.visible {
+  opacity: 1;
+}
+
+.footer-left {
+  display: flex;
+  align-items: center;
+}
+
+.footer-logo {
+  height: 50px;
+  margin-right: 10px;
+}
+
+.footer-name {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.footer-right {
+  display: flex;
+  gap: 15px;
+}
+
+.footer-social-link {
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-social-link:hover {
+  color: #aaa;
+}
+
+.game-select {
+  display: flex;
+  height: 86vh;
+}
+
+.logo-image{
+  position: relative;
+  width: 30vw;
+  height: auto;
+  top: -8vw;
+  left: -11vw;
+  opacity: 0.3;
+  z-index: -1;
+  transform: none;
+}
+
+.superExitInfo{
+  font-family: 'Terminus';
+  padding: 0;
+  margin: 5px;
+  text-align: center;
+  color: white;
+  font-size: 24px;
+  display: inline;
+}
+
+.superStartInfo{
+  font-family: 'Terminus';
+  padding: 0;
+  margin: 0px;
+  text-align: center;
+  color: white;
+  font-size: 14px;
+}
+
+.superStartInfoSub{
+  font-family: 'Terminus';
+  margin-bottom: 0;
+  margin-top: 1em;
+  text-align: center;
+  color: white;
+  font-size: 12px;
+}
+
+.checkmark {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: block;
+  stroke-width: 2;
+  stroke: #15bd12;
+  stroke-miterlimit: 10;
+  box-shadow: inset 0px 0px 0px #15bd12;
+  fill: none;
+  animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+}
+
+.checkmark__circle {
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  stroke-width: 2;
+  stroke-miterlimit: 10;
+  stroke: #15bd12;
+  fill: none;
+  animation: stroke .6s cubic-bezier(0.650, 0.000, 0.450, 1.000) forwards;
+}
+
+.checkmark__check {
+  stroke: white;
+  transform-origin: 50% 50%;
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  animation: stroke .3s cubic-bezier(0.650, 0.000, 0.450, 1.000) .8s forwards;
+}
+
+#returnButton{
+  font-family: 'Terminus';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  box-sizing: border-box;
+  font-size: 14px;
+  cursor: pointer;
+  color: black;
+  text-decoration: none;
+  background: white;
+  float: right;
+  border: 1px solid white;
+  border-radius: 100px;
+  padding: 10px 15px;
+  margin: 10px;
+  transition: background 0.3s ease 0s, color 0.3s ease 0s;
+}
+
+#returnButton:active, #returnButton:hover {
+  background: black;
+  color:white;
+  outline: none;
+  box-shadow: none;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(5px);
+  }
+}
+
+@keyframes stroke {
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes scale {
+  0%, 100% {
+    transform: none;
+  }
+
+  50% {
+    transform: scale3d(1.1, 1.1, 1);
+  }
+}
+
+@keyframes fill {
+  100% {
+    box-shadow: inset 0px 0px 0px 30px #15bd12;
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+  .game-select {
+    display: flex;
+    height: 75vh;
+    margin-top: 9vh;
+  }
+
+  .logo-image{
+    position: relative;
+    width: 40vw;
+    height: auto;
+    top: -9vw;
+    left: -18vw;
+    opacity: 0.3;
+    z-index: -1;
+    transform: none;
+  }
+
+  .titleBackground{
+    color: #eee;
+    font-family: 'Conthrax' !important;
+    font-size: 6vw;
+    margin-left: -40.5vw;
+    margin-top: -16vw;
+  }
+
+  .table{
+    -webkit-backdrop-filter: brightness(0.95);
+            backdrop-filter: brightness(0.95);
+    display: grid;
+    grid-template-rows: auto auto;
+    grid-template-columns: 2fr 1fr 1fr;
+    width: 40vw;
+    position: fixed;
+    margin-top: 1vw;
+  }
+
+  .playerName{
+    background-color: #FFF;
+    grid-column: span 3;
+    display: flex;
+    margin-bottom: 0.5em;
+    height: 2.5em;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    border: 1px solid #DCDCDC;
+    text-align: left;
+    margin-top: 3em;
+    font-size: 1rem;
+    font-family: 'Terminus';
+    overflow: hidden;
+  }
+
+  .topbar {
+    padding-top: 1em;
+  }
+
+  .info-scrolling-text{
+    font-size: 3em;
+    margin-top: 0.5em;
+  }
+
+  .info-footer{
+    top: 95vh;
+  }
+}
