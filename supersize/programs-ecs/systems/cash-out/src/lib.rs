@@ -23,12 +23,28 @@ pub enum SupersizeError {
     InvalidSupersizeTokenAccount,
     #[msg("Invalid game owner payout account.")]
     InvalidGameOwnerTokenAccount,
+    #[msg("Invalid referrer token account.")]
+    InvalidReferrerTokenAccount,
     #[msg("Token decimals not set.")]
     MissingTokenDecimals,
     #[msg("Token mint mismatch.")]
     InvalidMint,
     #[msg("Component doesn't belong to map.")]
     MapKeyMismatch,
+}
+
+pub fn get_amounts(final_score: f64, is_referred: bool) -> (f64, f64, f64, f64) {
+    if is_referred {
+        ( (final_score * 98.0) / 100.0,
+        (final_score * 0.9) / 100.0,
+        (final_score * 0.9) / 100.0,
+        (final_score * 0.2) / 100.0)
+    } else {
+        ( (final_score * 98.0) / 100.0,
+        (final_score * 1.0) / 100.0,
+        (final_score * 1.0) / 100.0,
+        0f64)
+    }
 }
 
 #[system]
@@ -98,12 +114,14 @@ pub mod cash_out {
         let decimals = ctx.accounts.anteroom.token_decimals.ok_or(SupersizeError::MissingTokenDecimals)?;
         let scale_factor = 10_u64.pow(decimals);
         let final_score = ctx.accounts.player.score;
-        let player_amount = (final_score * 98.0) / 100.0;
-        let game_owner_amount = (final_score * 1.0) / 100.0;
-        let supersize_amount = (final_score * 1.0) / 100.0;
-        let scaled_final_score = (player_amount * scale_factor as f64).round() as u64;  
-        let scaled_game_owner_amount = (game_owner_amount * scale_factor as f64).round() as u64;  
-        let scaled_supersize_amount = (supersize_amount * scale_factor as f64).round() as u64;  
+
+        let (player_amount, game_owner_amount, supersize_amount, referrer_amount) = get_amounts(final_score, ctx.accounts.player.referrer_key.is_some());
+
+        let (scaled_final_score, scaled_game_owner_amount, scaled_supersize_amount, scaled_referrer_amount) = 
+            ((player_amount * scale_factor as f64).round() as u64,
+            (game_owner_amount * scale_factor as f64).round() as u64,
+            (supersize_amount * scale_factor as f64).round() as u64,
+            (referrer_amount * scale_factor as f64).round() as u64);
 
         let transfer_instruction_player = Transfer {
             from: ctx.vault_token_account()?.to_account_info(),
@@ -144,6 +162,27 @@ pub mod cash_out {
         anchor_spl::token::transfer(cpi_ctx_owner, scaled_game_owner_amount)?;
         anchor_spl::token::transfer(cpi_ctx_supersize, scaled_supersize_amount)?;
 
+        if scaled_referrer_amount > 0 {
+            require!(
+                ctx.referrer_token_account()?.key() == ctx.accounts.player.referrer_token_account.unwrap(),
+                SupersizeError::InvalidReferrerTokenAccount
+            );
+
+            let transfer_instruction_referrer = Transfer {
+                from: ctx.vault_token_account()?.to_account_info(),
+                to: ctx.referrer_token_account()?.to_account_info(),
+                authority: ctx.token_account_owner_pda()?.to_account_info(),
+            };
+        
+            let cpi_ctx_referrer = CpiContext::new_with_signer(
+                ctx.token_program()?.to_account_info(),
+                transfer_instruction_referrer,
+                pda_signer,
+            );
+
+            anchor_spl::token::transfer(cpi_ctx_referrer, scaled_referrer_amount)?;
+        }
+
         let player = &mut ctx.accounts.player;
         player.score = 0.0;
         player.tax = 0.0;
@@ -171,6 +210,8 @@ pub mod cash_out {
         supersize_token_account: Account<'info, TokenAccount>,
         #[account(mut)]
         token_account_owner_pda: AccountInfo<'info>,
+        #[account(mut)]
+        referrer_token_account: Option<Account<'info, TokenAccount>>,
         #[account(mut)]
         signer: Signer<'info>,
         system_program: Program<'info, System>,

@@ -1,9 +1,18 @@
+use std::str::FromStr;
+
 use bolt_lang::*;
 use anteroom::Anteroom;
 use player::Player;
 use anchor_spl::token::{TokenAccount, Transfer};
+use solana_program::{instruction::Instruction, program::invoke};
+
+mod hash;
 
 declare_id!("CLC46PuyXnSuZGmUrqkFbAh7WwzQm8aBPjSQ3HMP56kp");
+
+pub const BUDDY_LINK_PROGRAM_ID: &str = "BUDDYtQp7Di1xfojiCSVDksiYLQx511DPdj2nbtG9Yu5";
+// pub const BUDDY_LINK_PROGRAM_ID: &str = "9zE4EQ5tJbEeMYwtS2w8KrSHTtTW4UPqwfbBSEkUrNCA"; // for devnet
+
 
 #[error_code]
 pub enum SupersizeError {
@@ -21,6 +30,12 @@ pub enum SupersizeError {
     MissingTokenDecimals,
     #[msg("Player component doesn't belong to map.")]
     MapKeyMismatch,
+    #[msg("Invalid Buddy Link Program.")]
+    InvalidBuddyLinkProgram,
+    #[msg("Remaining accounts are not provided.")]
+    InvalidRemainingAccounts,
+    #[msg("Given referrer is not valid.")]
+    InvalidReferrer,
 }
 
 #[system]
@@ -74,7 +89,88 @@ pub mod buy_in {
         anchor_spl::token::transfer(cpi_ctx, transfer_amount)?;
 
         let player_authority = Some(ctx.player_account()?.key());
+        let signer = ctx.signer()?;
         let player = &mut ctx.accounts.player;
+
+        if let Some(referrer) = args.referrer {
+            /*
+            Remaining accounts
+        
+            Buddy link program
+            Buddy profile
+            Buddy
+            Buddy treasury
+            Member
+            Referrer member
+            Referrer treasury
+            Referrer treasury reward
+        
+            Optional:
+            Mint
+            Referrer token account
+            */
+
+            let remaining_accounts = ctx.remaining_accounts;
+
+            let remaining_account_length = remaining_accounts.len();
+            require!(remaining_account_length == 8 || remaining_account_length == 10, SupersizeError::InvalidRemainingAccounts);
+        
+            let buddy_link_program = remaining_accounts[0].to_account_info();
+        
+            require!(buddy_link_program.key() == Pubkey::from_str(BUDDY_LINK_PROGRAM_ID).unwrap(), SupersizeError::InvalidBuddyLinkProgram);
+
+            let referrer_token_account: TokenAccount = TokenAccount::try_deserialize_unchecked(
+                &mut (remaining_accounts[9].to_account_info().data.borrow()).as_ref()
+            )?;
+
+            require!(
+                referrer_token_account.mint == ctx.accounts.anteroom.token.expect("Vault mint not set"),
+                SupersizeError::InvalidMint
+            );
+
+            let other_remaining_accounts = &remaining_accounts[1..];
+            let mut account_metas = vec![
+                AccountMeta::new(signer.key(), true),
+                AccountMeta::new_readonly(signer.key(), false),
+            ];
+        
+            account_metas.extend_from_slice(
+            &other_remaining_accounts
+                    .iter()
+                    .map(|account| AccountMeta {
+                        pubkey: account.key(),
+                        is_signer: account.is_signer,
+                        is_writable: account.is_writable,
+                    })
+                    .collect::<Vec<AccountMeta>>()
+            );
+        
+            let mut account_infos = vec![
+                signer.to_account_info(),
+                signer.to_account_info(),
+            ];
+        
+            account_infos.extend_from_slice(&other_remaining_accounts);
+        
+            let mut instruction_data: Vec<u8> = vec![];
+            instruction_data.extend_from_slice(&crate::hash::hash("global:validate_referrer".as_bytes()).to_bytes()[..8]);
+        
+            let instruction = Instruction {
+                program_id: buddy_link_program.key(),
+                accounts: account_metas,
+                data: instruction_data,
+            };
+
+            match invoke(&instruction, &account_infos) {
+                Ok(()) => {
+                    player.referrer_key = Some(referrer);
+                    player.referrer_token_account = Some(remaining_accounts[9].key());
+                },
+                _ => {
+                    return Err(error!(SupersizeError::InvalidReferrer));
+                }
+            };
+        }
         
         player.authority = player_authority;
         player.payout_token_account = player_payout_account;
@@ -94,6 +190,7 @@ pub mod buy_in {
     #[arguments]
     struct Args {
         buyin: f64,
+        referrer: Option<Pubkey>
     }
 
     #[extra_accounts]
@@ -109,5 +206,39 @@ pub mod buy_in {
         system_program: Program<'info, System>,
         token_program: Program<'info, Token>,
         rent: Sysvar<'info, Rent>,
+
+
+        // below account should be provided as remaining account when referrer is set.
+
+        // /// CHECK: this is accounts for buddy link program cpi call
+        // #[account()]
+        // buddy_link_program: Option<UncheckedAccount<'info>>,
+        // /// CHECK: this is accounts for buddy link program cpi call
+        // #[account()]
+        // buddy_profile: Option<UncheckedAccount<'info>>,
+        // /// CHECK: this is accounts for buddy link program cpi call
+        // #[account()]
+        // buddy: Option<UncheckedAccount<'info>>,
+        // /// CHECK: this is accounts for buddy link program cpi call
+        // #[account()]
+        // buddy_treasury: Option<UncheckedAccount<'info>>,
+        // /// CHECK: this is accounts for buddy link program cpi call
+        // #[account()]
+        // member: Option<UncheckedAccount<'info>>,
+        // /// CHECK: this is accounts for buddy link program cpi call
+        // #[account()]
+        // referrer_member: Option<UncheckedAccount<'info>>,
+        // /// CHECK: this is accounts for buddy link program cpi call
+        // #[account(mut)]
+        // referrer_treasury: Option<UncheckedAccount<'info>>,
+        // /// CHECK: this is accounts for buddy link program cpi call
+        // #[account()]
+        // referrer_treasury_reward: Option<UncheckedAccount<'info>>,
+        // /// CHECK: this is accounts for buddy link program cpi call
+        // #[account()]
+        // mint: Option<UncheckedAccount<'info>>,
+        // /// CHECK: this is accounts for buddy link program cpi call
+        // #[account()]
+        // referrer_token_account: Option<UncheckedAccount<'info>>,
     }
 }

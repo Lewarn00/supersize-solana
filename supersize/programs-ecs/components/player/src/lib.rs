@@ -7,6 +7,8 @@ pub struct Player {
     #[max_len(20)]
     pub name: String,
     pub authority: Option<Pubkey>,
+    pub referrer_key: Option<Pubkey>,
+    pub referrer_token_account: Option<Pubkey>,
     pub map: Option<Pubkey>,
     pub buy_in: f64,
     pub payout_token_account: Option<Pubkey>,
@@ -29,6 +31,8 @@ impl Default for Player {
         Self::new(PlayerInit{
             name: "unnamed".to_string(),
             authority: None,
+            referrer_key: None,
+            referrer_token_account: None,
             map: None,
             buy_in: 0.0,
             payout_token_account: None,

@@ -832,8 +832,11 @@ dependencies = [
  "anchor-spl",
  "anteroom",
  "bolt-lang",
+ "bs58 0.4.0",
  "player",
  "serde",
+ "sha2 0.10.8",
+ "thiserror",
 ]
 
 [[package]]
