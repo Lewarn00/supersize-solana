@@ -10,8 +10,8 @@ mod hash;
 
 declare_id!("CLC46PuyXnSuZGmUrqkFbAh7WwzQm8aBPjSQ3HMP56kp");
 
-pub const BUDDY_LINK_PROGRAM_ID: &str = "BUDDYtQp7Di1xfojiCSVDksiYLQx511DPdj2nbtG9Yu5";
-// pub const BUDDY_LINK_PROGRAM_ID: &str = "9zE4EQ5tJbEeMYwtS2w8KrSHTtTW4UPqwfbBSEkUrNCA"; // for devnet
+// pub const BUDDY_LINK_PROGRAM_ID: &str = "BUDDYtQp7Di1xfojiCSVDksiYLQx511DPdj2nbtG9Yu5";
+pub const BUDDY_LINK_PROGRAM_ID: &str = "9zE4EQ5tJbEeMYwtS2w8KrSHTtTW4UPqwfbBSEkUrNCA"; // for devnet
 
 
 #[error_code]

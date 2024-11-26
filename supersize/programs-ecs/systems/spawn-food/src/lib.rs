@@ -20,6 +20,15 @@ pub fn xorshift64(seed: u64) -> u64 {
     x
 }
 
+pub fn is_food_inside_bounds(x: u16, y: u16, size: u16, top_left_x: u16, top_left_y: u16) -> bool {
+    x > size &&
+    x - size >= top_left_x &&
+    x + size < top_left_x + 1000 &&
+    y > size &&
+    y - size >= top_left_y &&
+    y + size < top_left_y + 1000
+}
+
 #[system]
 pub mod spawn_food {
 
@@ -31,19 +40,17 @@ pub mod spawn_food {
 
         let queue_len = map.food_queue;
         if let Some(current_food) = map.next_food {
+            let (x, y, size) = current_food.unpack();
             require!(
-                current_food.x >= section.top_left_x &&
-                current_food.x < section.top_left_x + 1000 &&
-                current_food.y >= section.top_left_y &&
-                current_food.y < section.top_left_y + 1000,
+                is_food_inside_bounds(x, y, size as u16, section.top_left_x, section.top_left_y),
                 SupersizeError::FoodOutOfBounds
             );
             if section.food.len() < 100 {
-                let newfood = section::Food { x: current_food.x, y: current_food.y};
+                let newfood = section::Food { data: current_food.data };
                 section.food.push(newfood);
-                map.total_food_on_map += 1;
+                map.total_food_on_map += size as u64;
             }else{
-                map.food_queue = queue_len + 1;
+                map.food_queue = queue_len + size as u64;
             }
         }
         if queue_len > 0 {
@@ -55,9 +62,10 @@ pub mod spawn_food {
             let mixed_value_food_y = (xorshift_output.wrapping_mul(hardvar * 5) + xorshift_output) ^ (hardvar * 5).wrapping_shl(random_shift as u32);
             let food_x = mixed_value_food_x % map.width as u64;
             let food_y = mixed_value_food_y % map.height as u64;
-            let newfood = map::Food { x: food_x as u16, y: food_y as u16};
+            let food_size = 1u8; // always 1 here
+            let newfood = map::Food::pack(food_x as u16, food_y as u16, food_size);
             map.next_food = Some(newfood);
-            map.food_queue = queue_len - 1;
+            map.food_queue = queue_len - food_size as u64;
         }else{
             map.next_food = None;
         }

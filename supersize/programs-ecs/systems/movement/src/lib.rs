@@ -23,6 +23,15 @@ pub fn xorshift64(seed: u64) -> u64 {
     x
 }
 
+pub fn is_food_inside_bounds(x: u16, y: u16, size: u16, top_left_x: u16, top_left_y: u16) -> bool {
+    x > size &&
+    x - size >= top_left_x &&
+    x + size < top_left_x + 1000 &&
+    y > size &&
+    y - size >= top_left_y &&
+    y + size < top_left_y + 1000
+}
+
 #[system]
 pub mod movement {
 
@@ -117,14 +126,15 @@ pub mod movement {
                         let food_y = player_y as i16 + offset_y.round() as i16;
                         let clamped_food_x = (food_x as u16).clamp(0, map.width);
                         let clamped_food_y = (food_y as u16).clamp(0, map.height);
-                        if clamped_food_x >= section.top_left_x && clamped_food_x < section.top_left_x + 1000 &&
-                        clamped_food_y >= section.top_left_y && clamped_food_y < section.top_left_y + 1000 
+                        let food_unit = (player.mass as f64 / 1000.0).floor().clamp(1.0, 10.0).round() as u8;
+
+                        if is_food_inside_bounds(clamped_food_x, clamped_food_y, food_unit as u16, section.top_left_x, section.top_left_y)
                         {
-                            let newfood = section::Food { x: clamped_food_x, y: clamped_food_y };
+                            let newfood = section::Food::pack(clamped_food_x, clamped_food_y, food_unit);
                             section.food.push(newfood);
-                            map.total_food_on_map += 1;
+                            map.total_food_on_map += food_unit as u64;
                         } else {
-                            map.food_queue += 1;
+                            map.food_queue += food_unit as u64;
                         }
                     }
                 }
