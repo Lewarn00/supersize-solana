@@ -139,6 +139,8 @@ const App: React.FC = () => {
       "https://supersize-mainnet-sin.magicblock.app",
     ];*/
       
+    const [isReferrerModalOpen, setIsReferrerModalOpen] = useState(false);
+    const [referrerInput, setReferrerInput] = useState<string>("");
     const [fastestEndpoint, setFastestEndpoint] = useState<string | null>(null);
     const [enpointDone, setEndpointDone] = useState<boolean>(false);
     //const [wallet] = useState<Keypair>(() => Keypair.generate());
@@ -306,6 +308,10 @@ const App: React.FC = () => {
             console.log(newWallet, playerKey.toString());
         }
     }, [publicKey, savedPublicKey]);
+
+    const handleReferrer = useCallback(() => {
+
+    }, []);
 
     useEffect(() => {
         if (publicKey) {
@@ -962,6 +968,9 @@ const App: React.FC = () => {
     /**
      * Create a new join game transaction
      */
+    // const joinGameTx = useCallback(() => {
+    //     setIsReferrerModalOpen(true);
+    // }, [])
     const joinGameTx = useCallback(async (selectGameId: ActiveGame) => {
         if (!playerKey){
             setTransactionError("Wallet not connected");
@@ -2472,7 +2481,7 @@ const App: React.FC = () => {
 
     return (
         <>
-        <div className="supersize">
+        <div className={`supersize ${isReferrerModalOpen ? "background-dim" : ""}`}>
         <div className="topbar" style={{display: gameId == null && gameEnded == 0 && buildViewerNumber != 9 ? 'flex' : 'none',background: buildViewerNumber==1 ? "rgba(0, 0, 0, 0.3)" : "rgb(0, 0, 0)",height: isMobile && buildViewerNumber == 1 ? '20vh' : buildViewerNumber == 1 ? '10vh' : '4vh', zIndex: 9999999}}>
             {buildViewerNumber == 0 ? (
                 <>
@@ -3347,6 +3356,22 @@ const App: React.FC = () => {
         {transactionError && <Alert type="error" message={transactionError} onClose={() => setTransactionError(null) } />}
 
         {(transactionSuccess && !isJoining) && <Alert type="success" message={transactionSuccess} onClose={() => setTransactionSuccess(null) } />}
+
+        {isReferrerModalOpen && (
+            <div className="referrer-modal">
+                <div className="referrer-modal-content">
+                    <h1 className="referrer-modal-title">Are you a referee?</h1>
+                    <div>
+                        <span style={{fontFamily: "terminus", marginLeft: "10px", marginBottom: "10px"}}>Referrer:</span>
+                        <input type="text" className="referrer-input" placeholder="Username or Wallet address" value={referrerInput} onChange={(e) => {setReferrerInput(e.currentTarget.value)}}/>
+                    </div>
+                    <div style={{display: "flex", justifyContent: "space-between", margin: "4vh 2vw"}}>
+                        <button className="referrer-modal-btn" onClick={() => setIsReferrerModalOpen(false)}>Cancel</button>
+                        <button className="referrer-modal-btn" onClick={handleReferrer}>Ok</button>
+                    </div>
+                </div>
+            </div>
+        )}
         </div>
         </>
     );
