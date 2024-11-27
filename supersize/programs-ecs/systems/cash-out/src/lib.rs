@@ -115,7 +115,7 @@ pub mod cash_out {
         let scale_factor = 10_u64.pow(decimals);
         let final_score = ctx.accounts.player.score;
 
-        let (player_amount, game_owner_amount, supersize_amount, referrer_amount) = get_amounts(final_score, ctx.accounts.player.referrer_key.is_some());
+        let (player_amount, game_owner_amount, supersize_amount, referrer_amount) = get_amounts(final_score, ctx.accounts.player.referrer_key.is_some() && (!ctx.referrer_token_account()?.data_is_empty()));
 
         let (scaled_final_score, scaled_game_owner_amount, scaled_supersize_amount, scaled_referrer_amount) = 
             ((player_amount * scale_factor as f64).round() as u64,
@@ -167,20 +167,21 @@ pub mod cash_out {
                 ctx.referrer_token_account()?.key() == ctx.accounts.player.referrer_token_account.unwrap(),
                 SupersizeError::InvalidReferrerTokenAccount
             );
-
-            let transfer_instruction_referrer = Transfer {
-                from: ctx.vault_token_account()?.to_account_info(),
-                to: ctx.referrer_token_account()?.to_account_info(),
-                authority: ctx.token_account_owner_pda()?.to_account_info(),
-            };
-        
-            let cpi_ctx_referrer = CpiContext::new_with_signer(
-                ctx.token_program()?.to_account_info(),
-                transfer_instruction_referrer,
-                pda_signer,
-            );
-
-            anchor_spl::token::transfer(cpi_ctx_referrer, scaled_referrer_amount)?;
+            if !ctx.referrer_token_account()?.data_is_empty() {
+                let transfer_instruction_referrer = Transfer {
+                    from: ctx.vault_token_account()?.to_account_info(),
+                    to: ctx.referrer_token_account()?.to_account_info(),
+                    authority: ctx.token_account_owner_pda()?.to_account_info(),
+                };
+            
+                let cpi_ctx_referrer = CpiContext::new_with_signer(
+                    ctx.token_program()?.to_account_info(),
+                    transfer_instruction_referrer,
+                    pda_signer,
+                );
+    
+                anchor_spl::token::transfer(cpi_ctx_referrer, scaled_referrer_amount)?;
+            }
         }
 
         let player = &mut ctx.accounts.player;
@@ -211,7 +212,7 @@ pub mod cash_out {
         #[account(mut)]
         token_account_owner_pda: AccountInfo<'info>,
         #[account(mut)]
-        referrer_token_account: Option<Account<'info, TokenAccount>>,
+        referrer_token_account: Option<Account<'info, UncheckedAccount>>,
         #[account(mut)]
         signer: Signer<'info>,
         system_program: Program<'info, System>,

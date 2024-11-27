@@ -119,15 +119,6 @@ pub mod buy_in {
         
             require!(buddy_link_program.key() == Pubkey::from_str(BUDDY_LINK_PROGRAM_ID).unwrap(), SupersizeError::InvalidBuddyLinkProgram);
 
-            let referrer_token_account: TokenAccount = TokenAccount::try_deserialize_unchecked(
-                &mut (remaining_accounts[9].to_account_info().data.borrow()).as_ref()
-            )?;
-
-            require!(
-                referrer_token_account.mint == ctx.accounts.anteroom.token.expect("Vault mint not set"),
-                SupersizeError::InvalidMint
-            );
-
             let other_remaining_accounts = &remaining_accounts[1..];
             let mut account_metas = vec![
                 AccountMeta::new(signer.key(), true),
@@ -163,6 +154,15 @@ pub mod buy_in {
 
             match invoke(&instruction, &account_infos) {
                 Ok(()) => {
+                    let referrer_token_account: TokenAccount = TokenAccount::try_deserialize_unchecked(
+                        &mut (remaining_accounts[9].to_account_info().data.borrow()).as_ref()
+                    )?;
+        
+                    require!(
+                        referrer_token_account.mint == ctx.accounts.anteroom.token.expect("Vault mint not set"),
+                        SupersizeError::InvalidMint
+                    );
+                    
                     player.referrer_key = Some(referrer);
                     player.referrer_token_account = Some(remaining_accounts[9].key());
                 },
