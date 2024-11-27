@@ -6,6 +6,7 @@ import GameComponent from "./components/GameComponent";
 import CreateGameComponent from "./components/CreateGameComponent";
 import Alert from "./components/Alert";
 import Leaderboard from "./components/Leaderboard";
+import { Client, USDC_MINT } from "@ladderlabs/buddy-sdk";
 
 import {
     AddEntity,
@@ -63,6 +64,7 @@ import { set } from "@metaplex-foundation/beet";
 import { Metadata, PROGRAM_ID } from "@metaplex-foundation/mpl-token-metadata";
 
 import * as crypto from 'crypto-js';
+import { getUser } from "./helper/AxiosProvider";
 
 const bs58 = require('bs58');
 
@@ -91,6 +93,8 @@ interface Food {
 interface Blob {
     name: string;
     authority: PublicKey | null;
+    referrer_key: PublicKey | null;
+    referrer_token_account: PublicKey | null;
     x: number;
     y: number;
     radius: number;
@@ -309,10 +313,6 @@ const App: React.FC = () => {
         }
     }, [publicKey, savedPublicKey]);
 
-    const handleReferrer = useCallback(() => {
-
-    }, []);
-
     useEffect(() => {
         if (publicKey) {
             setSavedPublicKey(publicKey); 
@@ -485,6 +485,8 @@ const App: React.FC = () => {
         .map(player => ({ 
             name: player.name,
             authority: player.authority,
+            referrer_key: player.referrer_key,
+            referrer_token_account: player.referrer_token_account,
             x: player.x,
             y: player.y,
             radius: 4 + Math.sqrt(player.mass / 10) * 6,
@@ -605,6 +607,8 @@ const App: React.FC = () => {
                     accumulator.push({
                         name: playerx.name,
                         authority: playerx.authority,
+                        referrer_key: playerx.referrer_key,
+                        referrer_token_account: playerx.referrer_token_account,
                         x: playerx.x, //diffX + screenSize.width / 2,
                         y: playerx.y, //diffY + screenSize.height / 2,
                         radius: 4 + Math.sqrt(playerx.mass / 10) * 6,
@@ -648,6 +652,8 @@ const App: React.FC = () => {
                     const newPlayer: Blob = {
                         name: player.name,
                         authority: player.authority,
+                        referrer_key: player.referrer_key,
+                        referrer_token_account: player.referrer_token_account,
                         x: player.x,
                         y: player.y,
                         radius: 4 + Math.sqrt(player.mass / 10) * 6,
@@ -1215,61 +1221,220 @@ const App: React.FC = () => {
                 }
 
                 if(myPlayerStatus !== "rejoin_undelegated" && myPlayerStatus !== "resume_session" && myPlayerStatus !== "rejoin_session"){
-                const applyBuyInSystem = await ApplySystem({
-                    authority: publicKey,
-                    world: gameInfo.worldPda,
-                    entities: [
-                      {
-                        entity: newplayerEntityPda,
-                        components: [{ componentId:PLAYER_COMPONENT}],
-                      },
-                      {
-                        entity: anteEntityPda,
-                        components: [{ componentId:ANTEROOM_COMPONENT }],
-                      },
-                    ], 
-                    systemId: BUY_IN,
-                    args: {
-                        buyin: buyIn,
+                    const buddyLinkClient = new Client(connection as any, publicKey);
+                    const transaction = new Transaction();
+                    const organizationName = "Supersize";
+                    // check if user has buddy link profile and treasury
+                    const playerBuddyProfile = await buddyLinkClient.buddy.getProfile(publicKey);
+                    if (!playerBuddyProfile) {
+                        const playerProfileCreateIx = await buddyLinkClient.initialize.createProfile(playerName);
+                        const playerSolTreasuryCreateIx = await buddyLinkClient.initialize.createTreasuryByName(playerName);
+                        const playerUsdcTreasuryCreateIx = await buddyLinkClient.initialize.createTreasuryByName(playerName, USDC_MINT);
+                        transaction.add(...playerProfileCreateIx, ...playerSolTreasuryCreateIx, ...playerUsdcTreasuryCreateIx);
+                    }
+                    // check if user has member
+                    const playerBuddyMember = await buddyLinkClient.member.getByName(organizationName, playerName);
+                    if (!playerBuddyMember) {
+                        const playerMemberCreateIx = await buddyLinkClient.initialize.createMember(organizationName, playerName);
+                        transaction.add(...playerMemberCreateIx);
+                    }
+
+                    if (transaction.instructions.length > 0) {
+                        const buddyTxSig = await submitTransactionUser(transaction);
+                    }
+
+
+
+                setIsReferrerModalOpen(true);
+                do {
+                    await delay(500);
+                } while(!isReferrerModalOpen)
+                
+            let applyBuyInSystem = await ApplySystem({
+                authority: publicKey,
+                world: gameInfo.worldPda,
+                entities: [
+                    {
+                    entity: newplayerEntityPda,
+                    components: [{ componentId:PLAYER_COMPONENT}],
                     },
-                    extraAccounts: [
-                        {
-                          pubkey: vault_token_account,
-                          isWritable: true,
-                          isSigner: false,
+                    {
+                    entity: anteEntityPda,
+                    components: [{ componentId:ANTEROOM_COMPONENT }],
+                    },
+                ], 
+                systemId: BUY_IN,
+                args: {
+                    buyin: buyIn,
+                    referrer: null,
+                },
+                extraAccounts: [
+                    {
+                        pubkey: vault_token_account,
+                        isWritable: true,
+                        isSigner: false,
+                    },
+                    {
+                        pubkey: playerKey, 
+                        isWritable: true,
+                        isSigner: false,
+                    },
+                    {
+                        pubkey: payout_token_account, 
+                        isWritable: true,
+                        isSigner: false,
                         },
-                        {
-                          pubkey: playerKey, 
-                          isWritable: true,
-                          isSigner: false,
-                        },
-                        {
-                            pubkey: payout_token_account, 
-                            isWritable: true,
-                            isSigner: false,
-                          },
-                        {
-                          pubkey: publicKey,
-                          isWritable: true,
-                          isSigner: false,
-                        },
-                        {
-                          pubkey: SystemProgram.programId,
-                          isWritable: false,
-                          isSigner: false,
-                        },
-                        {
-                          pubkey: TOKEN_PROGRAM_ID,
-                          isWritable: false,
-                          isSigner: false,
-                        },
-                        {
-                          pubkey: SYSVAR_RENT_PUBKEY,
-                          isWritable: false,
-                          isSigner: false,
-                        },
-                      ],
-                  });
+                    {
+                        pubkey: publicKey,
+                        isWritable: true,
+                        isSigner: false,
+                    },
+                    {
+                        pubkey: SystemProgram.programId,
+                        isWritable: false,
+                        isSigner: false,
+                    },
+                    {
+                        pubkey: TOKEN_PROGRAM_ID,
+                        isWritable: false,
+                        isSigner: false,
+                    },
+                    {
+                        pubkey: SYSVAR_RENT_PUBKEY,
+                        isWritable: false,
+                        isSigner: false,
+                    },
+                    ],
+                });
+                if (referrerInput !== "") {
+                    const referrerRes = await getUser(referrerInput);
+                    if (referrerRes.success) {
+                        const referrerBuddyLinkProfile = await buddyLinkClient.buddy.getProfile(new PublicKey(referrerRes.data.wallet));
+                        if (referrerBuddyLinkProfile) {
+                            const treasury = await buddyLinkClient.pda.getTreasuryPDA(
+                                [referrerBuddyLinkProfile?.account.pda],
+                                [10_000],
+                                mint_of_token_being_sent
+                            );
+                            const member = (await buddyLinkClient.member.getByTreasuryOwner(treasury))[0] || null;
+                            const remainingAccounts =
+                                await buddyLinkClient.accounts.validateReferrerAccounts(
+                                    mint_of_token_being_sent,
+                                    member.account.pda
+                            );
+
+                            if (!remainingAccounts.memberPDA.equals(PublicKey.default)) {
+                                // submit with referrer
+                                applyBuyInSystem = await ApplySystem({
+                                    authority: publicKey,
+                                    world: gameInfo.worldPda,
+                                    entities: [
+                                        {
+                                        entity: newplayerEntityPda,
+                                        components: [{ componentId:PLAYER_COMPONENT}],
+                                        },
+                                        {
+                                        entity: anteEntityPda,
+                                        components: [{ componentId:ANTEROOM_COMPONENT }],
+                                        },
+                                    ], 
+                                    systemId: BUY_IN,
+                                    args: {
+                                        buyin: buyIn,
+                                        referrer: null,
+                                    },
+                                    extraAccounts: [
+                                        {
+                                            pubkey: vault_token_account,
+                                            isWritable: true,
+                                            isSigner: false,
+                                        },
+                                        {
+                                            pubkey: playerKey, 
+                                            isWritable: true,
+                                            isSigner: false,
+                                        },
+                                        {
+                                            pubkey: payout_token_account, 
+                                            isWritable: true,
+                                            isSigner: false,
+                                            },
+                                        {
+                                            pubkey: publicKey,
+                                            isWritable: true,
+                                            isSigner: false,
+                                        },
+                                        {
+                                            pubkey: SystemProgram.programId,
+                                            isWritable: false,
+                                            isSigner: false,
+                                        },
+                                        {
+                                            pubkey: TOKEN_PROGRAM_ID,
+                                            isWritable: false,
+                                            isSigner: false,
+                                        },
+                                        {
+                                            pubkey: SYSVAR_RENT_PUBKEY,
+                                            isWritable: false,
+                                            isSigner: false,
+                                        },
+                                        {
+                                            pubkey: remainingAccounts.programId,
+                                            isWritable: false,
+                                            isSigner: false
+                                        },
+                                        {
+                                            pubkey: remainingAccounts.buddyProfile,
+                                            isWritable: false,
+                                            isSigner: false
+                                        },
+                                        {
+                                            pubkey: remainingAccounts.buddy,
+                                            isWritable: false,
+                                            isSigner: false
+                                        },
+                                        {
+                                            pubkey: remainingAccounts.buddyTreasury,
+                                            isWritable: false,
+                                            isSigner: false
+                                        },
+                                        {
+                                            pubkey: remainingAccounts.memberPDA,
+                                            isWritable: false,
+                                            isSigner: false
+                                        },
+                                        {
+                                            pubkey: remainingAccounts.referrerMember,
+                                            isWritable: false,
+                                            isSigner: false
+                                        },
+                                        {
+                                            pubkey: remainingAccounts.referrerTreasury,
+                                            isWritable: true,
+                                            isSigner: false
+                                        },
+                                        {
+                                            pubkey: remainingAccounts.referrerTreasuryReward,
+                                            isWritable: false,
+                                            isSigner: false
+                                        },
+                                        {
+                                            pubkey: remainingAccounts.mint,
+                                            isWritable: false,
+                                            isSigner: false
+                                        },
+                                        {
+                                            pubkey: remainingAccounts.referrerATA,
+                                            isWritable: false,
+                                            isSigner: false
+                                        },
+                                        ],
+                                    });
+                            }
+                        }
+                    }
+                }
                 combinedTx.add(applyBuyInSystem.transaction);
             }
 
@@ -1368,6 +1533,8 @@ const App: React.FC = () => {
                 const emptyPlayer: Blob = {
                     name: 'unnamed',
                     authority: null,
+                    referrer_key: null,
+                    referrer_token_account: null,
                     x: 50000,
                     y: 50000,
                     radius: 0,
@@ -1508,6 +1675,8 @@ const App: React.FC = () => {
             //console.log(currentPlayer)
             if(currentPlayerEntity.current && anteroomEntity.current && entityMatch.current){
                 console.log('cashing out')
+                let referrer_token_account = currentPlayer.referrer_token_account;
+
                 const myplayerComponent = FindComponentPda({
                     componentId: PLAYER_COMPONENT,
                     entity: currentPlayerEntity.current,
@@ -1579,6 +1748,106 @@ const App: React.FC = () => {
                         sender_token_account = playerCashoutAddy;
                     }
                    if(cashingOut && gameEnded==2){
+
+                    const extraAccounts = referrer_token_account ? [
+                        {
+                          pubkey: vault_token_account,
+                          isWritable: true,
+                          isSigner: false,
+                        },
+                        {
+                          pubkey: sender_token_account,
+                          isWritable: true,
+                          isSigner: false,
+                        },
+                        {
+                            pubkey: owner_token_account,
+                            isWritable: true,
+                            isSigner: false,
+                          },
+                          {
+                            pubkey: supersize_token_account,
+                            isWritable: true,
+                            isSigner: false,
+                          },
+                          {
+                            pubkey: tokenAccountOwnerPda,
+                            isWritable: true,
+                            isSigner: false,
+                          },
+                          {
+                            pubkey: referrer_token_account,
+                            isWritable: true,
+                            isSigner: false,
+                          },
+                        {
+                          pubkey: savedPublicKey,
+                          isWritable: true,
+                          isSigner: false,
+                        },
+                        {
+                          pubkey: SystemProgram.programId,
+                          isWritable: false,
+                          isSigner: false,
+                        },
+                        {
+                          pubkey: TOKEN_PROGRAM_ID,
+                          isWritable: false,
+                          isSigner: false,
+                        },
+                        {
+                          pubkey: SYSVAR_RENT_PUBKEY,
+                          isWritable: false,
+                          isSigner: false,
+                        },
+                      ] : [
+                        {
+                          pubkey: vault_token_account,
+                          isWritable: true,
+                          isSigner: false,
+                        },
+                        {
+                          pubkey: sender_token_account,
+                          isWritable: true,
+                          isSigner: false,
+                        },
+                        {
+                            pubkey: owner_token_account,
+                            isWritable: true,
+                            isSigner: false,
+                          },
+                          {
+                            pubkey: supersize_token_account,
+                            isWritable: true,
+                            isSigner: false,
+                          },
+                          {
+                            pubkey: tokenAccountOwnerPda,
+                            isWritable: true,
+                            isSigner: false,
+                          },
+                        {
+                          pubkey: savedPublicKey,
+                          isWritable: true,
+                          isSigner: false,
+                        },
+                        {
+                          pubkey: SystemProgram.programId,
+                          isWritable: false,
+                          isSigner: false,
+                        },
+                        {
+                          pubkey: TOKEN_PROGRAM_ID,
+                          isWritable: false,
+                          isSigner: false,
+                        },
+                        {
+                          pubkey: SYSVAR_RENT_PUBKEY,
+                          isWritable: false,
+                          isSigner: false,
+                        },
+                      ]
+
                     const applyCashOutSystem = await ApplySystem({
                         authority: savedPublicKey,
                         world: currentWorldId.current,
@@ -1593,53 +1862,7 @@ const App: React.FC = () => {
                           },
                         ], 
                         systemId: CASH_OUT,
-                        extraAccounts: [
-                            {
-                              pubkey: vault_token_account,
-                              isWritable: true,
-                              isSigner: false,
-                            },
-                            {
-                              pubkey: sender_token_account,
-                              isWritable: true,
-                              isSigner: false,
-                            },
-                            {
-                                pubkey: owner_token_account,
-                                isWritable: true,
-                                isSigner: false,
-                              },
-                              {
-                                pubkey: supersize_token_account,
-                                isWritable: true,
-                                isSigner: false,
-                              },
-                              {
-                                pubkey: tokenAccountOwnerPda,
-                                isWritable: true,
-                                isSigner: false,
-                              },
-                            {
-                              pubkey: savedPublicKey,
-                              isWritable: true,
-                              isSigner: false,
-                            },
-                            {
-                              pubkey: SystemProgram.programId,
-                              isWritable: false,
-                              isSigner: false,
-                            },
-                            {
-                              pubkey: TOKEN_PROGRAM_ID,
-                              isWritable: false,
-                              isSigner: false,
-                            },
-                            {
-                              pubkey: SYSVAR_RENT_PUBKEY,
-                              isWritable: false,
-                              isSigner: false,
-                            },
-                          ],
+                        extraAccounts
                       });
                     const cashouttx = new anchor.web3.Transaction().add(applyCashOutSystem.transaction); 
                     const cashoutsignature = await submitTransactionUser(cashouttx);
@@ -2478,6 +2701,10 @@ const App: React.FC = () => {
           console.warn('Element with class name "logo-image" not found.');
         }
     }, [buildViewerNumber]);
+
+    const delay = useCallback((ms: number) => {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }, [])
 
     return (
         <>
@@ -3366,8 +3593,8 @@ const App: React.FC = () => {
                         <input type="text" className="referrer-input" placeholder="Username or Wallet address" value={referrerInput} onChange={(e) => {setReferrerInput(e.currentTarget.value)}}/>
                     </div>
                     <div style={{display: "flex", justifyContent: "space-between", margin: "4vh 2vw"}}>
-                        <button className="referrer-modal-btn" onClick={() => setIsReferrerModalOpen(false)}>Cancel</button>
-                        <button className="referrer-modal-btn" onClick={handleReferrer}>Ok</button>
+                        <button className="referrer-modal-btn" onClick={() => {setReferrerInput(""); setIsReferrerModalOpen(false)}}>Cancel</button>
+                        <button className="referrer-modal-btn" onClick={() => setIsReferrerModalOpen(false)}>Ok</button>
                     </div>
                 </div>
             </div>
