@@ -30,20 +30,20 @@ impl Food {
         let packed = u32::from_le_bytes(self.data);
 
         // Extract the values using bit masking and shifting
-        let x = (packed & 0x1FFF) as u16;          // Extract bits 0-12
-        let y = ((packed >> 13) & 0x1FFF) as u16;  // Extract bits 13-25
-        let size = ((packed >> 26) & 0x07) as u8;     // Extract bits 26-28
+        let x = (packed & 0x3FFF) as u16;          // Extract bits 0-14
+        let y = ((packed >> 14) & 0x3FFF) as u16;  // Extract bits 14-28
+        let size = ((packed >> 28) & 0x0F) as u8;     // Extract bits 28-32
 
         (x, y, size)
     }
 
     pub fn pack(x: u16, y: u16, size: u8) -> Self {
-        assert!(x < 8000, "x out of range");
-        assert!(y < 8000, "y out of range");
-        assert!(size < 8, "z out of range");
+        assert!(x < 16_384, "x out of range");
+        assert!(y < 16_384, "y out of range");
+        assert!(size < 16, "z out of range");
 
         // Combine the values into a single u32
-        let packed = ((size as u32) << 26) | ((y as u32) << 13) | (x as u32);
+        let packed = ((size as u32) << 28) | ((y as u32) << 14) | (x as u32);
 
         // Convert the u32 into a 4-byte array
         let data = packed.to_le_bytes(); // Little-endian byte order
