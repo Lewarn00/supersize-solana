@@ -54,6 +54,31 @@ app.post("/create-user", async (req: express.Request, res: express.Response) => 
 });
 
 //@ts-ignore
+app.get("/get-user", async (req: express.Request, res: express.Response) => {
+  const { user } = req.query;
+  if (!user) {
+    return res.status(400).json({ error: "User is required" });
+  }
+  try {
+    const userRes = await prisma.user.findFirst({
+      where: {
+        OR: [
+          {name: user as string},
+          {walletAddress: user as string}
+        ]
+      }
+    });
+    if (!userRes) {
+      return res.status(400).json({ error: "Contest not found" });
+    } else {
+      return res.json({ username: userRes.name, wallet: userRes.walletAddress });
+    }
+  } catch (error) {
+    return res.status(500).json({ error: "Failed to get user" });
+  }
+})
+
+//@ts-ignore
 app.post("/update-wins", async (req: express.Request, res: express.Response) => {
   const { walletAddress, updateId, amount }: { walletAddress: string; updateId: string; amount: number } = req.body;
   if (!walletAddress || updateId !== "USDC" && updateId !== "SOL" && updateId !== "AGLD") {
