@@ -37,14 +37,15 @@ pub mod eat_food {
         require!(player_authority == Some(authority), SupersizeError::NotOwner);
 
         section.food.retain(|food| {
-                let dx = (player_x as i16 - food.x as i16).abs();
-                let dy = (player_y as i16 - food.y as i16).abs();
+                let (x, y, size) = food.unpack();
+                let dx = (player_x as i16 - x as i16).abs();
+                let dy = (player_y as i16 - y as i16).abs();
                 if dx < player_radius.ceil() as i16 && dy < player_radius.ceil() as i16 {
                     let distance = ((dx as f64).powf(2.0) + (dy as f64).powf(2.0)).sqrt();
-                    if distance < player_radius {
-                        player.mass += 1;
-                        player.score += map.base_buyin as f64 / 1000.0;
-                        map.total_food_on_map -= 1;
+                    if player_radius > size as f64 && distance < player_radius - size as f64 {
+                        player.mass += size as u64;
+                        player.score += (map.base_buyin as f64 / 1000.0) * size as f64;
+                        map.total_food_on_map -= size as u64;
                         false 
                     } else {
                         true
