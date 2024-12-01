@@ -64,6 +64,7 @@ import { Metadata, PROGRAM_ID } from "@metaplex-foundation/mpl-token-metadata";
 
 import * as crypto from 'crypto-js';
 import axios from "axios";
+import { Swap } from "./components/Swap";
 
 const bs58 = require('bs58');
 
@@ -2860,6 +2861,13 @@ const App: React.FC = () => {
                     <div className="play">
                         <Button buttonClass="createGameButton" title={"Create Game"} onClickFunction={() => setbuildViewerNumber(5)}/>
                     </div>
+                    <div>
+                        <Swap
+                            amount={0.000001}
+                            quoteMint={"EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"}
+                        />
+                    </div>
+
                 </div>
             </div>
             
