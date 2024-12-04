@@ -177,7 +177,8 @@ import {
       amount: number,
       poolKeys: LiquidityPoolKeys,
       useVersionedTransaction = true,
-      slippage: number = 5
+      slippage: number = 5,
+      isOutputAmount = false
     ): Promise<Transaction | VersionedTransaction> {
       const poolInfo = await Liquidity.fetchInfo({ connection: this.connection, poolKeys });
       
@@ -190,16 +191,31 @@ import {
       const currencyIn = swapSide === "in" ? baseToken : quoteToken;
       const currencyOut = swapSide === "in" ? quoteToken : baseToken;
   
-      const amountIn = new TokenAmount(currencyIn, amount, false);
+      let amountIn, minAmountOut;
       const slippagePercent = new Percent(slippage, 100);
   
-      const { amountOut, minAmountOut } = Liquidity.computeAmountOut({
-        poolKeys,
-        poolInfo,
-        amountIn,
-        currencyOut,
-        slippage: slippagePercent,
-      });
+      if (isOutputAmount) {
+        const amountOut = new TokenAmount(currencyOut, amount, false);
+        const { amountIn: computedAmountIn } = Liquidity.computeAmountIn({
+          poolKeys,
+          poolInfo,
+          amountOut,
+          currencyIn,
+          slippage: slippagePercent,
+        });
+        amountIn = computedAmountIn;
+        minAmountOut = amountOut;
+      } else {
+        amountIn = new TokenAmount(currencyIn, amount, false);
+        const { amountOut, minAmountOut: computedMinAmountOut } = Liquidity.computeAmountOut({
+          poolKeys,
+          poolInfo,
+          amountIn,
+          currencyOut,
+          slippage: slippagePercent,
+        });
+        minAmountOut = computedMinAmountOut;
+      }
   
       const userTokenAccounts = await this.getOwnerTokenAccounts();
   

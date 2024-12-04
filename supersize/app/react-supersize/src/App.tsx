@@ -2863,7 +2863,7 @@ const App: React.FC = () => {
                     </div>
                     <div>
                         <Swap
-                            amount={0.000001}
+                            desiredOutputAmount={1}
                             quoteMint={"EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"}
                         />
                     </div>

@@ -6,10 +6,10 @@ const QUICKNODE_URL="https://fabled-black-spring.solana-mainnet.quiknode.pro/403
 
 interface SwapProps {
   quoteMint: string;
-  amount: number;
+  desiredOutputAmount: number;
 }
 
-export const Swap: FC<SwapProps> = ({ quoteMint, amount }) => {
+export const Swap: FC<SwapProps> = ({ quoteMint, desiredOutputAmount }) => {
   const wallet = useWallet();
 
   const handleSwap = async () => {
@@ -32,13 +32,14 @@ export const Swap: FC<SwapProps> = ({ quoteMint, amount }) => {
         throw new Error('Pool not found');
       }
 
-      // Get swap transaction
+      // Get swap transaction with output amount
       const transaction = await raydiumSwap.getSwapTransaction(
         quoteMint,
-        amount,
+        desiredOutputAmount,
         poolKeys,
         CONFIG.USE_VERSIONED_TRANSACTION,
-        CONFIG.SLIPPAGE
+        CONFIG.SLIPPAGE,
+        true
       );
 
       // Send transaction
@@ -63,9 +64,11 @@ export const Swap: FC<SwapProps> = ({ quoteMint, amount }) => {
     <button 
       onClick={handleSwap}
       disabled={!wallet.connected}
-      className="px-4 py-2 bg-blue-500 text-white rounded hover:cursor-pointer hover:bg-blue-600 disabled:bg-gray-400"
+      className="px-4 py-2 bg-blue-500 text-white rounded hover:cursor-pointer hover:bg-blue-600 disabled:bg-gray-400 
+        transition-all duration-200 transform hover:scale-105 active:scale-95 
+        shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
     >
-      Buy Now
+      <span>Buy {desiredOutputAmount} USDC</span>
     </button>
   );
 };
