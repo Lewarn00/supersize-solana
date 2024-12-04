@@ -68,6 +68,7 @@ import { initBuddyState, initialBuddyLink, useInitBuddyLink,
 
 import * as crypto from 'crypto-js';
 import axios from "axios";
+import { Swap } from "./components/Swap";
 
 const bs58 = require('bs58');
 
@@ -3180,6 +3181,13 @@ const App: React.FC = () => {
                     <div className="play">
                         <Button buttonClass="createGameButton" title={"Create Game"} onClickFunction={() => setbuildViewerNumber(5)}/>
                     </div>
+                    <div>
+                        <Swap
+                            desiredOutputAmount={1}
+                            quoteMint={"EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"}
+                        />
+                    </div>
+
                 </div>
             </div>
             
