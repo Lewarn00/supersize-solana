@@ -1,74 +1,97 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { RaydiumSwap } from '../helper/raydium-swap';
-import { CONFIG } from '../helper/config';
-const QUICKNODE_URL="https://fabled-black-spring.solana-mainnet.quiknode.pro/403e73aa24efc4d0ac66d3741cb69cc9cf0b0720"
+import { Connection, VersionedTransaction } from '@solana/web3.js';
+import axios from 'axios';
 
 interface SwapProps {
   quoteMint: string;
   desiredOutputAmount: number;
 }
+const assets = [
+  { name: 'SOL', mint: 'So11111111111111111111111111111111111111112', decimals: 9},
+  { name: 'USDC', mint: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', decimals: 6},
+  { name: 'BONK', mint: 'DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263', decimals: 5 },
+  { name: 'WIF', mint: 'EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm', decimals: 6},
+];
 
 export const Swap: FC<SwapProps> = ({ quoteMint, desiredOutputAmount }) => {
   const wallet = useWallet();
-
+  const [swapAmount, setSwapAmount] = useState(0);
+  
+  const connection = new Connection(
+    'https://mainnet.helius-rpc.com/?api-key=4fadbb67-634f-49fd-a664-74cf04509e20'
+  );
+  
   const handleSwap = async () => {
-    try {
-      if (!wallet.connected || !wallet.publicKey) {
-        throw new Error('Please connect your wallet first');
-      }
-
-      console.log("Hello world")
-      const raydiumSwap = new RaydiumSwap(QUICKNODE_URL, wallet);
-      
-      // Find pool info
-      const poolKeys = await raydiumSwap.findRaydiumPoolInfo(
-        CONFIG.BASE_MINT,
-        quoteMint
+  
+    if (!wallet.connected || !wallet.signTransaction) {
+      console.error(
+        'Wallet is not connected or does not support signing transactions'
       );
-
-      console.log("Running till here")
-      if (!poolKeys) {
-        throw new Error('Pool not found');
-      }
-
-      // Get swap transaction with output amount
-      const transaction = await raydiumSwap.getSwapTransaction(
-        quoteMint,
-        desiredOutputAmount,
-        poolKeys,
-        CONFIG.USE_VERSIONED_TRANSACTION,
-        CONFIG.SLIPPAGE,
-        true
-      );
-
-      // Send transaction
-      if ('version' in transaction) {
-        const { blockhash, lastValidBlockHeight } = await raydiumSwap.connection.getLatestBlockhash();
-        const signature = await raydiumSwap.sendVersionedTransaction(
-          transaction,
-          blockhash,
-          lastValidBlockHeight
-        );
-        console.log('Swap successful:', signature);
-      } else {
-        const signature = await raydiumSwap.sendLegacyTransaction(transaction);
-        console.log('Swap successful:', signature);
-      }
-    } catch (error) {
-      console.error('Swap failed:', error);
+      return;
     }
+
+    const response = await axios.get(`https://quote-api.jup.ag/v6/quote?inputMint=${assets[0].mint}&outputMint=${assets[1].mint}&swapMode=ExactOut&amount=${desiredOutputAmount * 10 ** assets[1].decimals}`)
+  
+    console.log(response.data);
+
+    const swapTransactionRequest = await axios.post("https://quote-api.jup.ag/v6/swap", {
+      quoteResponse: response.data,
+      userPublicKey: wallet.publicKey?.toString(),
+      wrapAndUnwrapSol: true,
+    })    
+
+    const {swapTransaction} = swapTransactionRequest.data;
+
+    try {
+      const swapTransactionBuffer = Buffer.from(swapTransaction, 'base64');
+      const transaction = VersionedTransaction.deserialize(swapTransactionBuffer);
+      const signedTransaction = await wallet.signTransaction(transaction);
+
+      const rawTransaction = signedTransaction.serialize();
+      const txid = await connection.sendRawTransaction(rawTransaction, {
+        skipPreflight: true,
+        maxRetries: 2,
+      });
+
+      const latestBlockHash = await connection.getLatestBlockhash();
+      await connection.confirmTransaction({
+        blockhash: latestBlockHash.blockhash,
+        lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
+        signature: txid
+      }, 'confirmed');
+
+      console.log(`https://solscan.io/tx/${txid}`);
+    }catch(err) {
+      console.log(err);
+    }
+
   };
 
   return (
     <button 
-      onClick={handleSwap}
-      disabled={!wallet.connected}
-      className="px-4 py-2 bg-blue-500 text-white rounded hover:cursor-pointer hover:bg-blue-600 disabled:bg-gray-400 
-        transition-all duration-200 transform hover:scale-105 active:scale-95 
-        shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
-    >
-      <span>Buy {desiredOutputAmount} USDC</span>
-    </button>
+  onClick={handleSwap}
+  disabled={!wallet.connected}
+  style={{
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "12px 40px",
+    backgroundColor: "white",
+    color: "black",
+    border: "none",
+    borderRadius: "10px", // More rounded corners
+    cursor: wallet.connected ? "pointer" : "not-allowed",
+    transition: "all 0.2s ease",
+    fontWeight: "600",
+    fontSize: "16px",
+    letterSpacing: "0.5px",
+    opacity: wallet.connected ? 1 : 0.7,
+    transform: "scale(1)",
+    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+  }}
+>
+  <span>Buy {desiredOutputAmount} USDC</span>
+</button>
   );
 };
