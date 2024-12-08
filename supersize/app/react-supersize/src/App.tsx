@@ -3808,7 +3808,7 @@ const App: React.FC = () => {
                         </svg>
                         )}
                         </div> */}
-                        <button id="returnButton" onClick={() => {window.location.reload();}}>Return home</button>
+                        {cashoutTx !== null && cashoutTx !== 'error' && (<button id="returnButton" onClick={() => {window.location.reload();}}>Return home</button>)}
                     </div>
                 </div>
             )}
