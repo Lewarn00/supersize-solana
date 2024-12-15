@@ -50,7 +50,7 @@ const TweetLink: React.FC<ShareProps> = React.memo(
       <>
         {(member && member?.length > 0) || forceShareState ? (
           <div
-            className={`bg-boost-navy-background text-boost-secondary-pink text-xs border border-boost-secondary-pink rounded-md font-avenir-bold active:scale-95 uppercase px-4 py-1 text-nowrap`}
+            className={`bg-boost-navy-background text-boost-secondary-pink text-s rounded-md font-avenir-bold active:scale-95 uppercase px-4 py-1 text-nowrap`}
             onClick={() => {if(!isTweeting){handleTweetLink()}}}
             style={{ color: isHovered ? '#FFEF8A' : 'inherit' }}
             onMouseEnter={() => setIsHovered(true)}

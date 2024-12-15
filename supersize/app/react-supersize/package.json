@@ -1,74 +1,83 @@
 {
-    "homepage": ".",
-    "name": "tic-tac-toe-game",
-    "version": "0.1.0",
-    "private": true,
-    "dependencies": {
-        "@coral-xyz/anchor": "^0.30.1",
-        "@craco/craco": "^7.1.0",
-        "@magicblock-labs/bolt-sdk": "^0.1.10",
-        "@metaplex-foundation/js": "^0.20.1",
-        "@raydium-io/raydium-sdk": "^1.3.1-beta.58",
-        "@solana/spl-token": "^0.4.8",
-        "@solana/wallet-adapter-base": "^0.9.23",
-        "@solana/wallet-adapter-react": "^0.15.35",
-        "@solana/wallet-adapter-react-ui": "^0.9.35",
-        "@solana/wallet-adapter-wallets": "^0.19.32",
-        "@solana/web3.js": "^1.93.2",
-        "@types/crypto-js": "^4.2.2",
-        "axios": "^1.7.7",
-        "buddy.link": "^0.7.7",
-        "crypto-js": "^4.2.0",
-        "framer-motion": "^7.10.3",
-        "lucide-react": "^0.462.0",
-        "react": "^18.3.1",
-        "react-dom": "^18.3.1",
-        "react-scripts": "^5.0.1",
-        "sass": "^1.77.6",
-        "web-vitals": "^2.1.4"
-    },
-    "scripts": {
-        "start": "craco start",
-        "build": "craco build",
-        "test": "craco test",
-        "eject": "react-scripts eject",
-        "deploy": "gh-pages -d build"
-    },
-    "eslintConfig": {
-        "extends": [
-            "react-app",
-            "react-app/jest"
-        ]
-    },
-    "browserslist": {
-        "production": [
-            ">0.2%",
-            "not dead",
-            "not op_mini all"
-        ],
-        "development": [
-            "last 1 chrome version",
-            "last 1 firefox version",
-            "last 1 safari version"
-        ]
-    },
-    "devDependencies": {
-        "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-        "@testing-library/jest-dom": "^5.16.5",
-        "@testing-library/react": "^13.3.0",
-        "@testing-library/user-event": "^13.5.0",
-        "@types/bn.js": "^5.1.6",
-        "@types/jest": "^29.5.12",
-        "@types/react": "^18.2.73",
-        "@types/react-dom": "^18.2.23",
-        "buffer": "^6.0.3",
-        "buffer-browserify": "^0.2.5",
-        "crypto-browserify": "^3.12.0",
-        "gh-pages": "^6.1.1",
-        "https-browserify": "^1.0.0",
-        "process": "^0.11.10",
-        "stream-browserify": "^3.0.0",
-        "stream-http": "^3.2.0",
-        "typescript": "^5.4.3"
-    }
+  "name": "react-supersize",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@coral-xyz/anchor": "^0.30.1",
+    "@magicblock-labs/bolt-sdk": "0.1.10",
+    "@metaplex-foundation/mpl-token-metadata": "^3.3.0",
+    "@raydium-io/raydium-sdk": "^1.3.1-beta.58",
+    "@solana/spl-token": "^0.4.8",
+    "@solana/wallet-adapter-base": "^0.9.23",
+    "@solana/wallet-adapter-react": "^0.15.35",
+    "@solana/wallet-adapter-react-ui": "^0.9.35",
+    "@solana/wallet-adapter-wallets": "^0.19.32",
+    "@solana/web3.js": "^1.93.2",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^16.18.119",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "ajv": "^8.17.1",
+    "bn.js": "^4.12.1",
+    "buddy.link": "^0.7.8",
+    "crypto-js": "^4.2.0",
+    "framer-motion": "^11.12.0",
+    "lucide-react": "^0.462.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.28.0",
+    "react-scripts": "^5.0.1",
+    "typescript": "^5.4.3",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
+    "eject": "react-app-rewired eject",
+    "lint": "eslint 'src/**/*.{ts,tsx}'",
+    "format": "prettier --write 'src/**/*.{ts,tsx,js,json,md}'"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@eslint/js": "^9.16.0",
+    "@types/bn.js": "^5.1.6",
+    "@types/crypto-js": "^4.2.2",
+    "autoprefixer": "^10.4.20",
+    "buffer": "^6.0.3",
+    "buffer-browserify": "^0.2.5",
+    "crypto-browserify": "^3.12.0",
+    "eslint": "^9.16.0",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "globals": "^15.13.0",
+    "https-browserify": "^1.0.0",
+    "postcss": "^8.4.49",
+    "prettier": "^3.4.1",
+    "react-app-rewire-alias": "^1.1.7",
+    "react-app-rewired": "^2.2.1",
+    "sass": "^1.81.0",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
+    "tailwindcss": "^3.4.15",
+    "typescript-eslint": "^8.17.0"
+  },
+  "resolutions": {
+    "@solana/web3.js": "1.95.5"
+  }
 }

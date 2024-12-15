@@ -2,13 +2,19 @@ import { useBuddyState, BUDDY_MEMBER } from 'buddy.link'
 import React, { useCallback, useMemo, useState } from 'react'
 import Invite from './buddyInvite'
 import { Copy } from 'lucide-react'
+import useSupersize from "@hooks/useSupersize";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 interface ShareProps {
   baseUrl?: string;
+  handleCreateClick: () => void;
 }
 
-const CopyLink: React.FC<ShareProps> = React.memo(({ baseUrl = 'https://supersize.gg'}) => {
-  const [member] = useBuddyState(BUDDY_MEMBER)
+const CopyLink: React.FC<ShareProps> = React.memo(({ baseUrl = 'https://supersize.gg', handleCreateClick}) => {
+  const [member] = useBuddyState(BUDDY_MEMBER);
+  const { publicKey, sendTransaction } = useWallet();
+  const { setUsername, setIsReferrerModalOpen, isReferrerModalOpen, username } = useSupersize();
+
   const [isCopying, setIsCopying] = useState(false) //Control loading state, prevent duplicate clicks
   const [textContet, setTextContent] = useState("Copy referral link")
   const [isHovered, setIsHovered] = useState(false);
@@ -52,7 +58,7 @@ const CopyLink: React.FC<ShareProps> = React.memo(({ baseUrl = 'https://supersiz
     <>
       {member && member?.length > 0 ? (
         <div
-          className="h-10 w-40 bg-transparent text-sm border border-boost-secondary-yellow text-boost-secondary-yellow rounded-md font-avenir-bold active:scale-95 uppercase py-2 text-nowrap flex-grow sm:flex-none"
+          className="h-10 w-40 bg-transparent text-sm text-boost-secondary-yellow rounded-md font-avenir-bold active:scale-95 uppercase py-2 text-nowrap flex-grow sm:flex-none px-4"
           onClick={() => {if(!isCopying){handleCopyLink()}}}
           style={{marginBottom:"5px"}}>
         <div className="inline-flex items-center gap-2">
@@ -62,7 +68,7 @@ const CopyLink: React.FC<ShareProps> = React.memo(({ baseUrl = 'https://supersiz
         {/* <Copy size={20} style={{ verticalAlign: 'middle', display:"inline" }} />  */}
         </div>
         </div>
-      ) : null}
+      ) : <span className="px-4" onClick={handleCreateClick}>{publicKey ? "Create Referral" : ""}</span>}
     </>
   )
 })
